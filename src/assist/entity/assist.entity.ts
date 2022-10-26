@@ -1,3 +1,4 @@
+import { Status } from '../enums/assist.status.enum';
 import { Types } from '../enums/assist.types.enum';
 import { Address } from './address.aggregate.entity';
 
@@ -16,5 +17,7 @@ export class Assist {
 
   type: Types;
 
-  status: boolean;
+  status: Status;
+
+  finished: boolean;
 }

@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import { CreateAssistInput } from '../controllers/inputs/create.assist.input';
 import { Assist } from '../entity/assist.entity';
+import { Status } from '../enums/assist.status.enum';
 import { AssistRepositoryInterface } from '../repository/assist.repository.interface';
 
 @Injectable()
@@ -14,15 +15,19 @@ export class AssistSaveUseCase {
   async createAssist(createAssistInput: CreateAssistInput): Promise<Assist> {
     const assist = new Assist();
 
-    const status = [true, false];
+    const finished = [true, false];
 
     assist.id = uuid();
     assist.createdAt = new Date().toISOString();
     assist.latitude = createAssistInput.latitude;
     assist.longitude = createAssistInput.longitude;
-    assist.status = status[Math.floor(Math.random() * status.length)];
+    assist.finished = finished[Math.floor(Math.random() * finished.length)];
     assist.userDocument = createAssistInput.userDocument;
     assist.type = createAssistInput.type;
+
+    const values = Object.keys(Status);
+    const enumKey = values[Math.floor(Math.random() * values.length)];
+    assist.status = Status[enumKey];
 
     assist.address = {
       street: createAssistInput?.address?.street,

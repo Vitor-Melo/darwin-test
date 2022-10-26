@@ -2,11 +2,11 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
 const dynamoClient = new DynamoDBClient({
-  region: process.env.DYNAMODB_REGION,
-  endpoint: process.env.DYNAMODB_ENDPOINT,
+  region: process.env.DYNAMODB_REGION || 'us-east-2',
+  endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
   credentials: {
-    accessKeyId: process.env.DYNAMODB_CREDENTIALS_ACCESSKEY,
-    secretAccessKey: process.env.DYNAMODB_CREDENTIALS_SECRETKEY,
+    accessKeyId: process.env.DYNAMODB_CREDENTIALS_ACCESSKEY || 'test',
+    secretAccessKey: process.env.DYNAMODB_CREDENTIALS_SECRETKEY || 'test2',
   },
 });
 

@@ -3,13 +3,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AssistSaveUseCase } from '../usecases/assist.save.usecase';
 import { AssistGetByIdUseCase } from '../usecases/assist.getById.usecase';
 import { AssistNotClosedAssistsUseCase } from '../usecases/assist.notClosed.byUserDocument.usecase';
-import { ASSIST_REPOSITORY } from '../assist.module';
 import { AssistRepository } from '../../infrastructure/database/dynamodb/assist/repository/assist.repository';
 import { Types } from '../enums/assist.types.enum';
 import { CreateAssistInput } from './inputs/create.assist.input';
 import { AssistCreateOutput } from './outputs/assist.create.output';
 import { Address } from '../entity/address.aggregate.entity';
 import { Assist } from '../entity/assist.entity';
+import { Status } from '../enums/assist.status.enum';
 
 describe('AssistController', () => {
   let assistController: AssistController;
@@ -25,7 +25,7 @@ describe('AssistController', () => {
         AssistGetByIdUseCase,
         AssistNotClosedAssistsUseCase,
         {
-          provide: ASSIST_REPOSITORY,
+          provide: 'ASSIST_REPOSITORY',
           useClass: AssistRepository,
         },
       ],
@@ -40,7 +40,7 @@ describe('AssistController', () => {
   });
 
   describe('root', () => {
-    it('test should return promise with id', async () => {
+    it('test should return output with id', async () => {
       const input: CreateAssistInput = {
         userDocument: '000.000.000-10',
         latitude: -40.4086,
@@ -72,7 +72,8 @@ describe('AssistController', () => {
         longitude: 40.0,
         createdAt: new Date().toDateString(),
         type: Types['tire'],
-        status: true,
+        finished: true,
+        status: Status.RECEIVED,
         address: address,
       };
 
@@ -103,7 +104,8 @@ describe('AssistController', () => {
         longitude: 40.0,
         createdAt: new Date().toDateString(),
         type: Types['tire'],
-        status: true,
+        finished: true,
+        status: Status.RECEIVED,
         address: address,
       };
 
@@ -111,9 +113,58 @@ describe('AssistController', () => {
         .spyOn(assistGetById, 'getById')
         .mockImplementation(() => Promise.resolve(assist));
 
-      expect(await assistController.getAssist({ id: assist.id })).toStrictEqual(
-        assist,
-      );
+      expect(await assistController.getAssist({ id: assist.id })).toEqual({
+        status: assist.status,
+      });
+    });
+
+    it('test should throw not found when find assist by id', async () => {
+      const input = {
+        id: 'DYN123',
+      };
+
+      jest
+        .spyOn(assistGetById, 'getById')
+        .mockImplementation(() => Promise.resolve(null));
+
+      await expect(
+        async () => await assistController.getAssist(input),
+      ).rejects.toThrow(`not found assist by ID: ${input.id}`);
+    });
+
+    it('test should return an assists collection by user document', async () => {
+      const address: Address = {
+        street: 'Street Example',
+        number: '1370',
+        neighborhood: 'Neighborhood example',
+        postalCode: '00000-000',
+        city: 'São Paulo',
+        state: 'SP',
+      };
+
+      const document = '000.000.000-10';
+
+      const assist: Assist = {
+        id: 'SDJK213',
+        userDocument: document,
+        latitude: -40.0,
+        longitude: 40.0,
+        createdAt: new Date().toDateString(),
+        type: Types['tire'],
+        finished: true,
+        status: Status.RECEIVED,
+        address: address,
+      };
+
+      jest
+        .spyOn(assistNotClosed, 'getAssists')
+        .mockImplementation(() => Promise.resolve([assist]));
+
+      expect(
+        await assistController.getAllNotClosedAssistsByDocument({
+          document: document,
+        }),
+      ).toEqual([assist]);
     });
   });
 });

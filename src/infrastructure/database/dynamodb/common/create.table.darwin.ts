@@ -17,7 +17,7 @@ const dynamoTableParams: CreateTableInput = {
     { AttributeName: 'PK', AttributeType: 'S' },
     { AttributeName: 'SK', AttributeType: 'S' },
     { AttributeName: 'username', AttributeType: 'S' },
-    { AttributeName: 'status', AttributeType: 'N' },
+    { AttributeName: 'finished', AttributeType: 'N' },
   ],
   ProvisionedThroughput: {
     ReadCapacityUnits: 2,
@@ -56,7 +56,7 @@ const dynamoTableParams: CreateTableInput = {
       IndexName: 'assist-index-1',
       KeySchema: [
         { AttributeName: 'SK', KeyType: 'HASH' },
-        { AttributeName: 'status', KeyType: 'RANGE' },
+        { AttributeName: 'finished', KeyType: 'RANGE' },
       ],
       Projection: {
         ProjectionType: 'ALL',

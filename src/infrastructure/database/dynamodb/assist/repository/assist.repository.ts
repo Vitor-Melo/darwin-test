@@ -5,6 +5,7 @@ import {
   QueryCommandInput,
 } from '@aws-sdk/lib-dynamodb';
 import { HttpStatus, Injectable } from '@nestjs/common';
+import { Status } from '../../../../../assist/enums/assist.status.enum';
 import { Address } from '../../../../../assist/entity/address.aggregate.entity';
 import { Assist } from '../../../../../assist/entity/assist.entity';
 import { Types } from '../../../../../assist/enums/assist.types.enum';
@@ -26,7 +27,8 @@ export class AssistRepository implements AssistRepositoryInterface {
         longitude: assist.longitude,
         address: assist.address,
         type: assist.type,
-        status: assist.status ? 1 : 0,
+        finished: assist.finished ? 1 : 0,
+        status: assist.status,
       },
     };
 
@@ -61,9 +63,12 @@ export class AssistRepository implements AssistRepositoryInterface {
     assist.id = id;
     assist.latitude = Number(response.Items[0].latitude.N);
     assist.longitude = Number(response.Items[0].longitude.N);
-    assist.status = Number(response.Items[0].status.N) === 1;
+    assist.status = Status[response.Items[0]?.status?.S];
+    assist.finished = Number(response.Items[0]?.finished?.N) === 1;
     assist.userDocument = response.Items[0].SK.S.split('#')[1];
-    assist.type = Types[response.Items[0].type.S];
+
+    assist.status = <Status>response.Items[0]?.status?.S;
+    assist.type = <Types>response.Items[0].type.S;
 
     const address = new Address();
 
@@ -86,7 +91,7 @@ export class AssistRepository implements AssistRepositoryInterface {
     const params: QueryInput = {
       ExpressionAttributeNames: {
         '#PK': 'SK',
-        '#SK': 'status',
+        '#SK': 'finished',
       },
       ExpressionAttributeValues: {
         ':pk': { S: `${AssistDynamodb.PREFIX_KEY}#${userDocument}` },
@@ -110,9 +115,11 @@ export class AssistRepository implements AssistRepositoryInterface {
       assist.id = item.PK.S.split('#')[1];
       assist.latitude = Number(item.latitude.N);
       assist.longitude = Number(item.longitude.N);
-      assist.status = Number(item.status.N) === 1;
+      assist.status = Status[item.type.S];
+      assist.finished = Number(item.finished.N) === 1;
       assist.userDocument = item.SK.S.split('#')[1];
-      assist.type = Types[item.type.S];
+      assist.status = <Status>response.Items[0]?.status?.S;
+      assist.type = <Types>response.Items[0].type.S;
 
       const address = new Address();
 

@@ -5,7 +5,7 @@ import {
   QueryCommandInput,
 } from '@aws-sdk/lib-dynamodb';
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { User } from 'src/user/entity/user.entity';
+import { User } from '../../../../../user/entity/user.entity';
 import { UserRepositoryInterface } from 'src/user/repository/user.repository.interface';
 import docClient from '../../common/client.dynamodb';
 import { DatabaseDynamoDb } from '../../common/database.enum';
