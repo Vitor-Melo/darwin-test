@@ -24,6 +24,10 @@
 
 ## Extras
 
+**Para rodar os testes**
+
+`npm run test`
+
 **Caso queira ver o tabela do DynamoDb**
 
 `npm install -g dynamodb-admin`
