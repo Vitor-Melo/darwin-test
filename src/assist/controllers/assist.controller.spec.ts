@@ -40,10 +40,6 @@ describe('AssistController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      // expect(assistController.get()).toBe('Hello World!');
-    });
-
     it('test should return promise with id', async () => {
       const input: CreateAssistInput = {
         userDocument: '000.000.000-10',
