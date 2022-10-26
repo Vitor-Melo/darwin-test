@@ -1,7 +1,9 @@
-import { IsNotEmpty, IsObject } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsObject } from 'class-validator';
+import { Types } from 'src/assist/enums/assist.types.enum';
 
 interface Address {
   street?: string | null;
+  number?: string | null;
   neighborhood?: string | null;
   postalCode?: string | null;
   city?: string | null;
@@ -13,14 +15,16 @@ export class CreateAssistInput {
   userDocument: string;
 
   @IsNotEmpty()
-  latitude: string;
+  @IsNumber()
+  latitude: number;
 
   @IsNotEmpty()
-  longitude: string;
+  @IsNumber()
+  longitude: number;
 
   @IsObject()
   address: Address;
 
-  @IsNotEmpty()
-  type: string;
+  @IsEnum(Types)
+  type: Types;
 }

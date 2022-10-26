@@ -3,7 +3,7 @@ import {
   CreateTableInput,
   GlobalSecondaryIndex,
 } from '@aws-sdk/client-dynamodb';
-import client from './clientDynamoDb';
+import client from './client.dynamodb';
 
 const DATABASE_TABLE_NAME = 'darwin';
 
@@ -17,7 +17,7 @@ const dynamoTableParams: CreateTableInput = {
     { AttributeName: 'PK', AttributeType: 'S' },
     { AttributeName: 'SK', AttributeType: 'S' },
     { AttributeName: 'username', AttributeType: 'S' },
-    { AttributeName: 'status', AttributeType: 'S' },
+    { AttributeName: 'status', AttributeType: 'N' },
   ],
   ProvisionedThroughput: {
     ReadCapacityUnits: 2,

@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsDateString, IsEmail, IsNotEmpty } from 'class-validator';
 
 export class CreateUserInput {
   @IsNotEmpty()
@@ -8,14 +8,15 @@ export class CreateUserInput {
   username: string;
 
   @IsNotEmpty()
-  cpf: string;
+  document: string;
 
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @IsNotEmpty()
   phone: string;
 
-  @IsNotEmpty()
+  @IsDateString()
   birthDate: string;
 }

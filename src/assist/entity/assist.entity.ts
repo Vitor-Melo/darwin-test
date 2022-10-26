@@ -1,3 +1,6 @@
+import { Types } from '../enums/assist.types.enum';
+import { Address } from './address.aggregate.entity';
+
 export class Assist {
   id: string;
 
@@ -5,13 +8,13 @@ export class Assist {
 
   createdAt: string;
 
-  latitude: string;
+  latitude: number;
 
-  longitude: string;
+  longitude: number;
 
-  address: object;
+  address: Address;
 
-  type: string;
+  type: Types;
 
   status: boolean;
 }

@@ -1,27 +1,40 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { User } from '../entity/user.entity';
-import { UserUseCase } from '../usecases/user.usecase';
-import { CreateUserInput } from './inputs/create.user.input';
+import { UserCreateUseCase } from '../usecases/user.create.usecase';
+import { UserGetByDocumentUseCase } from '../usecases/user.getByDocument.usecase';
+import { UserGetPhoneUseCase } from '../usecases/user.getPhone.usecase';
+import { UserGetUsernameUsecase } from '../usecases/user.getUsername.usecase';
+import { CreateUserInput } from './inputs/user.create.input';
+import { UserGetInput } from './inputs/user.get.input';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userUseCase: UserUseCase) {}
+  constructor(
+    private readonly userCreate: UserCreateUseCase,
+    private readonly userGetByDocument: UserGetByDocumentUseCase,
+    private readonly userGetByPhone: UserGetPhoneUseCase,
+    private readonly userGetByUsername: UserGetUsernameUsecase,
+  ) {}
 
   @Post()
   async create(@Body() createUserInput: CreateUserInput): Promise<User> {
-    return this.userUseCase.createUser(createUserInput);
+    return this.userCreate.createUser(createUserInput);
   }
 
   @Get()
-  async getUser(@Query() query: any): Promise<User> {
-    if (query.phone) {
-      return this.userUseCase.getUserByPhone(query.phone);
+  async getUser(@Query() userGetInput: UserGetInput): Promise<User> {
+    if (userGetInput.phone) {
+      return this.userGetByPhone.getUserByPhone(userGetInput.phone);
     }
 
-    if (query.username) {
-      return this.userUseCase.getUserByUsername(query.username);
+    if (userGetInput.username) {
+      return this.userGetByUsername.getUserByUsername(userGetInput.username);
     }
 
-    return this.userUseCase.getUser(query.cpf);
+    if (userGetInput.document) {
+      return this.userGetByDocument.getUser(userGetInput.document);
+    }
+
+    return null;
   }
 }

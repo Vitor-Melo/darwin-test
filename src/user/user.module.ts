@@ -1,11 +1,23 @@
 import { Module } from '@nestjs/common';
-import { UserRepository } from 'src/infrastructure/user/user.repository';
+import { UserRepository } from 'src/infrastructure/database/dynamodb/user/repository/user.repository';
 import { UserController } from './controllers/user.controller';
-import { UserUseCase } from './usecases/user.usecase';
+import { UserCreateUseCase } from './usecases/user.create.usecase';
+import { UserGetByDocumentUseCase } from './usecases/user.getByDocument.usecase';
+import { UserGetPhoneUseCase } from './usecases/user.getPhone.usecase';
+import { UserGetUsernameUsecase } from './usecases/user.getUsername.usecase';
 
 @Module({
   imports: [],
   controllers: [UserController],
-  providers: [UserUseCase, UserRepository],
+  providers: [
+    UserCreateUseCase,
+    UserGetPhoneUseCase,
+    UserGetByDocumentUseCase,
+    UserGetUsernameUsecase,
+    {
+      provide: 'USER_REPOSITORY',
+      useClass: UserRepository,
+    },
+  ],
 })
 export class UserModule {}

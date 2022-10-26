@@ -5,7 +5,7 @@ export class User {
 
   email: string;
 
-  cpf: string;
+  document: string;
 
   phone: string;
 
