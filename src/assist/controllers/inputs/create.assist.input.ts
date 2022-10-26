@@ -1,13 +1,31 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsObject } from 'class-validator';
-import { Types } from 'src/assist/enums/assist.types.enum';
+import { Type } from 'class-transformer';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsObject,
+  ValidateNested,
+} from 'class-validator';
+import { Types } from '../../enums/assist.types.enum';
 
-interface Address {
-  street?: string | null;
-  number?: string | null;
-  neighborhood?: string | null;
-  postalCode?: string | null;
-  city?: string | null;
-  state?: string | null;
+export class Address {
+  @IsNotEmpty()
+  street: string;
+
+  @IsNotEmpty()
+  number: string;
+
+  @IsNotEmpty()
+  neighborhood: string;
+
+  @IsNotEmpty()
+  postalCode: string;
+
+  @IsNotEmpty()
+  city: string;
+
+  @IsNotEmpty()
+  state: string;
 }
 
 export class CreateAssistInput {
@@ -23,6 +41,8 @@ export class CreateAssistInput {
   longitude: number;
 
   @IsObject()
+  @ValidateNested()
+  @Type(() => Address)
   address: Address;
 
   @IsEnum(Types)

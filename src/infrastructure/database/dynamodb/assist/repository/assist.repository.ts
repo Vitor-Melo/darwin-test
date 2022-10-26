@@ -5,10 +5,10 @@ import {
   QueryCommandInput,
 } from '@aws-sdk/lib-dynamodb';
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { Address } from 'src/assist/entity/address.aggregate.entity';
-import { Assist } from 'src/assist/entity/assist.entity';
-import { Types } from 'src/assist/enums/assist.types.enum';
-import { AssistRepositoryInterface } from 'src/assist/repository/assist.repository.interface';
+import { Address } from '../../../../../assist/entity/address.aggregate.entity';
+import { Assist } from '../../../../../assist/entity/assist.entity';
+import { Types } from '../../../../../assist/enums/assist.types.enum';
+import { AssistRepositoryInterface } from '../../../../../assist/repository/assist.repository.interface';
 import docClient from '../../common/client.dynamodb';
 import { DatabaseDynamoDb } from '../../common/database.enum';
 import { AssistDynamodb } from '../enum/assist.dynamodb.enum';

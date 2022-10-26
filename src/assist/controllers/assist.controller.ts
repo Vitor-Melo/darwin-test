@@ -4,6 +4,7 @@ import { AssistGetByIdUseCase } from '../usecases/assist.getById.usecase';
 import { AssistNotClosedAssistsUseCase } from '../usecases/assist.notClosed.byUserDocument.usecase';
 import { AssistSaveUseCase } from '../usecases/assist.save.usecase';
 import { CreateAssistInput } from './inputs/create.assist.input';
+import { AssistCreateOutput } from './outputs/assist.create.output';
 
 @Controller('assists')
 export class AssistController {
@@ -14,8 +15,14 @@ export class AssistController {
   ) {}
 
   @Post()
-  async createAssist(@Body() createAssistInput: CreateAssistInput) {
-    return this.assistSaveUseCase.createAssist(createAssistInput);
+  async createAssist(
+    @Body() createAssistInput: CreateAssistInput,
+  ): Promise<AssistCreateOutput> {
+    const assist = await this.assistSaveUseCase.createAssist(createAssistInput);
+
+    const output = new AssistCreateOutput();
+    output.id = assist.id;
+    return output;
   }
 
   @Get(':id')

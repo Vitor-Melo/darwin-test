@@ -6,7 +6,7 @@ export class AppController {
   constructor(private readonly appHealthCheckUseCase: AppHealthCheckUseCase) {}
 
   @Get()
-  async getHello(): Promise<any> {
+  get(): any {
     return this.appHealthCheckUseCase.healthCheck();
   }
 }
