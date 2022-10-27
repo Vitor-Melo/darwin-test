@@ -26,7 +26,7 @@
 
 **Para rodar os testes**
 
-`npm run test`
+`docker exec darwin-app npm run test`
 
 **Caso queira ver o tabela do DynamoDb**
 
